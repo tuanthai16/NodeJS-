@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+}
+
+.product-details {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.product-details img {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+<body>
+    <header>
+        <h1>Chi tiết sản phẩm</h1>
+    </header>
+    
+    <main>
+        <div class="product-details">
+            <h2>Tên sản phẩm: <%= product.name %></h2>
+            <td><img src="images/<%=product.image%>" alt=""></td>
+            <p>Giá: <%= product.price %></p>
+        </div>
+    </main>
+
+</body>
+</html>

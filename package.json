@@ -1,0 +1,29 @@
+{
+  "name": "wd18411_nodejs",
+  "version": "1.0.0",
+  "description": "project of wd18411",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tuanthai16/NodeJS.git"
+  },
+  "author": "TuanTQ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuanthai16/NodeJS/issues"
+  },
+  "homepage": "https://github.com/tuanthai16/NodeJS#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1"
+  }
+}

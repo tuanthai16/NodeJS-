@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #C92127;
+            color: #fff;
+            padding-top: 20px;
+            position: fixed;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar h1 {
+            text-align: center;
+            margin: 0;
+            padding: 10px 0;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar nav ul li {
+            padding: 15px 20px;
+            text-align: center;
+        }
+        .sidebar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            display: block;
+        }
+        .sidebar nav ul li a:hover {
+            background-color: #fff;
+            color: #C92127;
+        }
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .actions {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .actions button {
+            padding: 10px 20px;
+            border: none;
+            background: #C92127;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .actions button:hover {
+            background: #a71e22;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: none;
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-container form label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-container form input, 
+        .form-container form textarea {
+            margin-bottom: 20px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .form-container form input[type="submit"] {
+            background: #C92127;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-container form input[type="submit"]:hover {
+            background: #a71e22;
+        }
+        .error {
+            color: #E74C3C;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        h1 {
+            text-align: center;
+            color: #C92127;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            z-index: 1000;
+        }
+        .popup.show {
+            display: block;
+        }
+        .popup h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .popup button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #C92127;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>TRANG QUẢN TRỊ</h1>
+        <nav>
+            <ul>
+                <li><a href="/list">Home</a></li>
+                <li><a href="/create">Products</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="actions">
+            <button onclick="showForm()">Mở rộng</button>
+        </div>
+        <div id="form-container" class="form-container">
+            <form id="product-form" action="/save" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <label for="product-name">Tên sản phẩm</label>
+                <input type="text" id="product-name" name="name">
+                <div id="product-name-error" class="error"></div>
+
+                <label for="product-price">Giá sản phẩm</label>
+                <input type="number" id="product-price" name="price">
+                <div id="product-price-error" class="error"></div>
+
+                <label for="product-image">Hình ảnh</label>
+                <input type="file" id="product-image" name="image">
+                <div id="product-image-error" class="error"></div>
+
+                <input type="submit" value="Lưu">
+            </form>
+        </div>
+    </div>
+
+    <div id="success-popup" class="popup">
+        <h2>Thêm sản phẩm thành công!</h2>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+
+    <script>
+        function showForm() {
+            const formContainer = document.getElementById('form-container');
+            formContainer.style.display = 'block';
+        }
+
+        function validateForm() {
+            const productNameInput = document.getElementById('product-name');
+            const productPriceInput = document.getElementById('product-price');
+            const productImageInput = document.getElementById('product-image');
+            const productNameError = document.getElementById('product-name-error');
+            const productPriceError = document.getElementById('product-price-error');
+            const productImageError = document.getElementById('product-image-error');
+
+            let isValid = true;
+
+            // Validate Product Name
+            if (productNameInput.value.trim() === '') {
+                productNameError.textContent = 'Yêu cầu nhập trường thông tin tên sản phẩm';
+                isValid = false;
+            } else {
+                productNameError.textContent = '';
+            }
+
+            // Validate Product Price
+            if (productPriceInput.value <= 0) {
+                productPriceError.textContent = 'Yêu cầu nhập trường thông tin giá tiền';
+                isValid = false;
+            } else {
+                productPriceError.textContent = '';
+            }
+
+            // Validate Product Image
+            if (!productImageInput.files || productImageInput.files.length === 0) {
+                productImageError.textContent = 'Yêu cầu tải lên hình ảnh';
+                isValid = false;
+            } else {
+                productImageError.textContent = '';
+            }
+
+            if (isValid) {
+                showPopup();
+            }
+
+            return isValid;
+        }
+
+        function showPopup() {
+            const popup = document.getElementById('success-popup');
+            popup.classList.add('show');
+            setTimeout(() => {
+                closePopup();
+                redirectToList();
+            }, 2000); // Popup sẽ tự động tắt sau 2 giây
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('success-popup');
+            popup.classList.remove('show');
+        }
+
+        function redirectToList() {
+            setTimeout(() => {
+                window.location.href = '/list';
+            }, 4000); 
+        }
+    </script>
+</body>
+</html>

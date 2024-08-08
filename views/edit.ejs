@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aa77 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .actions {
+            margin: 20px 0;
+        }
+        .actions button {
+            padding: 10px 15px;
+            margin-left: 550px;
+            border: none;
+            background: #333;
+            color: white;
+            cursor: pointer;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-container form label {
+            margin-bottom: 5px;
+        }
+        .form-container form input, .form-container form textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+        }
+        /* .form-container form input[type="submit"] {
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        } */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>TRANG QUẢN TRỊ</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/list">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div class="actions">
+            <button onclick="showForm('add')">Mở rộng</button>
+        </div>
+
+        <div id="form-container" class="form-container" style="display: none;">
+            <form id="product-form" action="/update/<%=product.id%>" method="POST" enctype="multipart/form-data">
+            
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" name="name" value="<%=product.name %>">
+
+                <label for="product-description">Product Price</label>
+                <textarea id="product-description" name="price"></textarea>
+
+                <label for="product-price">Image</label>
+                <input type="file" id="product-price" name="image">
+                <% if (product.image) { %> 
+                    <img src="/images/<%=product.image%>" style="height: 100px;" alt="">
+                <% } %>
+
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+    <script>
+        function showForm(action) {
+            const formContainer = document.getElementById('form-container');
+            const form = document.getElementById('product-form');
+            
+            formContainer.style.display = 'block';
+            
+            if (action === 'add') {
+                form.setAttribute('onsubmit', 'return addProduct()');
+            } else if (action === 'edit') {
+                form.setAttribute('onsubmit', 'return editProduct()');
+            } else if (action === 'delete') {
+                form.setAttribute('onsubmit', 'return deleteProduct()');
+            }
+        }
+
+        
+    </script>
+
+</body>
+</html>

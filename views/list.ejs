@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #C92127;
+            color: #fff;
+            padding-top: 20px;
+            position: fixed;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        .sidebar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            display: block;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #E74C3C;
+        }
+
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .actions {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .actions button {
+            padding: 10px 20px;
+            border: none;
+            background: #E74C3C;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .actions button:hover {
+            background: #3498DB;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container form label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-container form input,
+        .form-container form textarea {
+            margin-bottom: 20px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-container form input[type="submit"] {
+            background: #2980B9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container form input[type="submit"]:hover {
+            background: #E74C3C;
+        }
+
+        .error {
+            color: #E74C3C;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #E74C3C;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #E74C3C;
+            color: white;
+            font-weight: bold;
+        }
+
+        td img {
+            max-height: 100px;
+        }
+
+        .button-container {
+            text-align: right;
+            margin: 20px 0;
+        }
+
+        .button-container button,
+        .action-button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #E74C3C;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container button:hover,
+        .action-button:hover {
+            background-color: #3498DB;
+        }
+
+        .delete-button {
+            background-color: #C92127;
+        }
+
+        .delete-button:hover {
+            background-color: #E74C3C;
+        }
+
+        .popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .popup.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1>ADMIN</h1>
+        <nav>
+            <ul>
+                <li><a href="/list">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="/register">Đăng ký</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <!-- <h1>Đây là trang danh sách</h1> -->
+        <div class="button-container">
+            <button id="addButton" onclick="window.location.href='/create'">Thêm mới</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let p of pros) { %>
+                <tr>
+                    <td><%= p.id %></td>
+                    <td><%= p.name %></td>
+                    <td><%= p.price %></td>
+                    <td><img src="images/<%=p.image%>" alt=""></td>
+                    <td>
+                        <button class="action-button" onclick="window.location.href='/details/<%=p.id%>'">View</button>
+                        <button class="action-button" onclick="window.location.href='/edit/<%=p.id%>'">Edit</button>
+                        <button class="action-button delete-button" onclick="confirmDelete('<%=p.id%>')">Delete</button>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <div id="popup" class="popup">Xóa thành công!</div>
+    <script>
+        function confirmDelete(id) {
+            if (confirm('Are you sure?')) {
+                showPopup();
+                setTimeout(() => {
+                    window.location.href = '/delete/' + id;
+                }, 1000);
+            }
+        }
+
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>
